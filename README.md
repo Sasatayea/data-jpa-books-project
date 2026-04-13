@@ -127,19 +127,20 @@ file.upload.dir=/uploads/books
 
 ## 📁 Project Structure
 
+```
 data-jpa-books-project/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/global/book/
 │   │   │   ├── controller/          # REST Controllers
 │   │   │   │   ├── BookController.java
-│   │   │   │   ├── AutherController.java
+│   │   │   │   ├── AuthorController.java
 │   │   │   │   └── FileUploadController.java
 │   │   │   ├── entity/              # JPA Entities & DTOs
 │   │   │   │   ├── Book.java
-│   │   │   │   ├── Auther.java
+│   │   │   │   ├── Author.java
 │   │   │   │   ├── BookDto.java
-│   │   │   │   └── AutherSearch.java
+│   │   │   │   └── AuthorSearch.java
 │   │   │   ├── repository/          # Spring Data Repositories
 │   │   │   ├── service/             # Business Logic
 │   │   │   ├── config/              # Configuration Classes
@@ -148,12 +149,12 @@ data-jpa-books-project/
 │   │   │   │   ├── SwaggerConfig.java
 │   │   │   │   └── SchedulerConfig.java
 │   │   │   ├── validator/           # Custom Validators
-│   │   │   │   ├── IpAdress.java
-│   │   │   │   └── IpAdressImpl.java
+│   │   │   │   ├── IpAddress.java
+│   │   │   │   └── IpAddressValidator.java
 │   │   │   ├── error/               # Exception Handling
-│   │   │   │   ├── GlobalExecptionHandler.java
-│   │   │   │   ├── RecoredNotFoundExecption.java
-│   │   │   │   ├── DaplicateRecoredException.java
+│   │   │   │   ├── GlobalExceptionHandler.java
+│   │   │   │   ├── RecordNotFoundException.java
+│   │   │   │   ├── DuplicateRecordException.java
 │   │   │   │   ├── FileStorageException.java
 │   │   │   │   └── ErrorResponse.java
 │   │   │   └── DataJpaBooksProjectApplication.java
@@ -161,8 +162,7 @@ data-jpa-books-project/
 │   │       └── application.properties
 │   └── test/                        # Unit Tests
 └── pom.xml                          # Maven Configuration
-
----
+```
 
 ## 🔌 API Endpoints
 
