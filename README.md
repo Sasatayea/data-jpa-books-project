@@ -69,25 +69,20 @@ Before running this project, ensure you have:
 
 ### Step 1: Clone the Repository
 
-```bash
 git clone https://github.com/Sasatayea/data-jpa-books-project.git
 cd data-jpa-books-project/data-jpa-books-project
-```
 
 ### Step 2: Create MySQL Database
 
-```sql
 CREATE DATABASE books_db;
 CREATE USER 'bookuser'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON books_db.* TO 'bookuser'@'localhost';
 FLUSH PRIVILEGES;
-```
 
 ### Step 3: Update Configuration
 
 Edit `src/main/resources/application.properties`:
 
-```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/books_db
 spring.datasource.username=bookuser
 spring.datasource.password=password
@@ -99,13 +94,10 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
 spring.jpa.properties.hibernate.format_sql=true
 
 server.port=8080
-```
 
 ### Step 4: Build the Project
 
-```bash
 mvn clean install
-```
 
 ---
 
@@ -115,7 +107,6 @@ mvn clean install
 
 The application requires the following configuration:
 
-```properties
 # Database Configuration
 spring.datasource.url=jdbc:mysql://localhost:3306/books_db
 spring.datasource.username=root
@@ -131,7 +122,6 @@ server.servlet.context-path=/api
 
 # File Upload
 file.upload.dir=/uploads/books
-```
 
 ---
 
@@ -172,7 +162,6 @@ data-jpa-books-project/
 │   └── test/                        # Unit Tests
 └── pom.xml                          # Maven Configuration
 
-
 ---
 
 ## 🔌 API Endpoints
@@ -212,7 +201,6 @@ data-jpa-books-project/
 
 ### Books Table
 
-```sql
 CREATE TABLE books (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     title VARCHAR(255) NOT NULL,
@@ -224,11 +212,9 @@ CREATE TABLE books (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (author_id) REFERENCES authors(id)
 );
-```
 
 ### Authors Table
 
-```sql
 CREATE TABLE authors (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
@@ -238,7 +224,6 @@ CREATE TABLE authors (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-```
 
 ---
 
@@ -246,14 +231,11 @@ CREATE TABLE authors (
 
 ### Using Maven
 
-```bash
-# Build and run
 mvn spring-boot:run
 
-# Or build a JAR and run it
+Or build a JAR and run it:
 mvn clean package
 java -jar target/data-jpa-books-project-0.0.1-SNAPSHOT.jar
-```
 
 ### Using IDE
 
@@ -261,10 +243,162 @@ java -jar target/data-jpa-books-project-0.0.1-SNAPSHOT.jar
 2. Right-click on `DataJpaBooksProjectApplication.java`
 3. Select "Run" or "Debug"
 
-The application will start on `http://localhost:8080`
+The application will start on http://localhost:8080
 
 ---
 
 ## 📖 API Documentation
 
 Once the application is running, access the Swagger UI at:
+
+http://localhost:8080/swagger-ui.html
+
+Or the OpenAPI JSON specification at:
+
+http://localhost:8080/v3/api-docs
+
+### Example Request - Create a Book
+
+curl -X POST http://localhost:8080/api/books \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Effective Java",
+    "isbn": "978-0-13-468599-1",
+    "authorId": 1,
+    "publishedDate": "2018-01-01",
+    "pages": 416
+  }'
+
+### Example Response
+
+{
+  "id": 1,
+  "title": "Effective Java",
+  "isbn": "978-0-13-468599-1",
+  "author": {
+    "id": 1,
+    "name": "Joshua Bloch"
+  },
+  "publishedDate": "2018-01-01",
+  "pages": 416,
+  "createdAt": "2024-01-15T10:30:00Z"
+}
+
+---
+
+## ⚠️ Error Handling
+
+The application implements comprehensive error handling with standardized error responses:
+
+### Error Response Format
+
+{
+  "timestamp": "2024-01-15T10:30:00Z",
+  "status": 404,
+  "error": "Not Found",
+  "message": "Book with ID 999 not found",
+  "path": "/api/books/999"
+}
+
+### Common Exceptions
+
+| Exception | HTTP Status | Scenario |
+|-----------|-------------|----------|
+| `RecordNotFoundExecution` | 404 | Resource not found |
+| `DuplicateRecordedException` | 409 | Duplicate entry |
+| `FileStorageException` | 400 | File upload error |
+| `ValidationException` | 400 | Invalid input |
+
+---
+
+## 📤 File Upload
+
+The application supports file uploads with validation:
+
+### Upload Endpoint
+
+curl -X POST http://localhost:8080/api/files/upload \
+  -F "file=@/path/to/file.pdf"
+
+### Supported Features
+
+- ✅ Multiple file format support
+- ✅ File size validation
+- ✅ Virus scanning (optional)
+- ✅ Secure storage with unique file IDs
+
+---
+
+## ✔️ Validation
+
+The project includes custom validators:
+
+### IP Address Validation
+
+@IpAdress
+private String ipAddress;
+
+### Built-in Validations
+
+@NotNull(message = "Title cannot be null")
+@NotBlank(message = "Title cannot be blank")
+private String title;
+
+@Email(message = "Invalid email format")
+private String email;
+
+@Min(value = 1, message = "Pages must be at least 1")
+private Integer pages;
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. **Fork** the repository
+2. **Create** a feature branch (git checkout -b feature/amazing-feature)
+3. **Commit** your changes (git commit -m 'Add amazing feature')
+4. **Push** to the branch (git push origin feature/amazing-feature)
+5. **Open** a Pull Request
+
+### Coding Standards
+
+- Use **Lombok** for getters/setters
+- Follow **REST** conventions
+- Write **unit tests** for new features
+- Update **Swagger documentation**
+- Keep **classes single-responsibility**
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+---
+
+## 📧 Contact & Support
+
+For questions or support, please:
+
+- Open an **Issue** on GitHub
+- Contact the maintainers
+- Check existing documentation
+
+---
+
+## 🎯 Roadmap
+
+- [ ] Implement pagination for list endpoints
+- [ ] Add caching layer (Redis)
+- [ ] Implement JWT authentication
+- [ ] Add rate limiting
+- [ ] Create frontend UI
+- [ ] Deploy to cloud (AWS/Azure/GCP)
+- [ ] Add integration tests
+- [ ] Performance optimization
+
+---
+
+**Happy coding! 🚀**
